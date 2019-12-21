@@ -15,6 +15,18 @@ exports.checkId = (req, res, next, val) => {
     next();
 };
 
+// created middleware to check body
+exports.checkBody = (req, res, next) => {
+    if (!req.body.name || !req.body.price) {
+        return res.status(400).json({
+            status: 'fail',
+            message: 'Missing name or price'
+        });
+    }
+
+    next();
+};
+
 // handle tours
 exports.getAllTours = (req, res) => {
     console.log(req.requestTime);

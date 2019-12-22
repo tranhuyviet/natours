@@ -21,13 +21,23 @@ exports.getAllTours = async (req, res) => {
 
         // 2. Sorting
         if (req.query.sort) {
-            // const querySort = req.query.sort.split(',').join(' ');
-            const querySort = req.query.sort.replace(',', ' ');
+            const querySort = req.query.sort.split(',').join(' ');
+            // const querySort = req.query.sort.replace(',', ' ');
             console.log(querySort);
             query = query.sort(querySort);
         } else {
             // default sort by createdAt
             query = query.sort('-createdAt');
+        }
+
+        // 3. Fields limiting
+        if (req.query.fields) {
+            const fields = req.query.fields.split(',').join(' ');
+            console.log(fields);
+            query = query.select(fields);
+            // query = query.select('name duration price')
+        } else {
+            query = query.select('-__v');
         }
 
         // way 1 to filter:

@@ -40,6 +40,21 @@ exports.getAllTours = async (req, res) => {
             query = query.select('-__v');
         }
 
+        // 4.Pagination
+        // page=3&limit=10: page 1 = 1-10; page 2 = 11-20; page 3 = 21-30
+        const page = req.query.page * 1 || 1; // convert string to Number and default by 1
+        const limit = req.query.limit * 1 || 100;
+        const skip = (page - 1) * limit;
+
+        query = query.skip(skip).limit(limit);
+
+        if (req.query.page) {
+            const numTours = await Tour.countDocuments();
+            if (skip >= numTours) {
+                throw new Error('This page does not exists');
+            }
+        }
+
         // way 1 to filter:
         // const tours = await Tour.find({
         //     duration: 5,
@@ -72,7 +87,7 @@ exports.getAllTours = async (req, res) => {
     } catch (err) {
         res.status(404).json({
             status: 'fail',
-            message: 'Can not get the data!'
+            message: err
         });
     }
 };

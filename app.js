@@ -28,4 +28,13 @@ app.use((req, res, next) => {
 app.use('/api/v1/tours', tourRouter); // add tour router in to middleware (mounting)
 app.use('/api/v1/users', userRouter); // add user router in to middleware (mounting)
 
+// handle if url request not correctly
+// .all that mean every request: get, post, update, delete,...
+app.all('*', (req, res, next) => {
+    res.status(404).json({
+        status: 'fail',
+        message: `Can't find ${req.originalUrl} on this server!`
+    });
+});
+
 module.exports = app;

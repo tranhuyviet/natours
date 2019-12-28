@@ -89,6 +89,21 @@ exports.protect = catchAsync(async (req, res, next) => {
         );
 
     // GRANT ACCESS TO PROTECTED ROUTE
-    req.user = currentUser;
+    req.user = currentUser; // this req will be send to next middleware. In this case will sent to restricTo
     next();
 });
+
+exports.restrictTo = (...roles) => {
+    return (req, res, next) => {
+        // roles is array, ex: ['admin','lead-guide'], role='user'
+        if (!roles.includes(req.user.role))
+            return next(
+                new AppError(
+                    'You do not have permission to perform this action',
+                    403
+                )
+            );
+
+        next();
+    };
+};

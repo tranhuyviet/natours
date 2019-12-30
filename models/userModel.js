@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema({
         minlength: [6, 'A password must have more or equal then 8 characters'],
         select: false
     },
-    confirmPassword: {
+    passwordConfirm: {
         type: String,
         required: [true, 'Please confirm your password'],
         validate: {
@@ -55,6 +55,13 @@ userSchema.pre('save', async function(next) {
 
     // delete passwordConfirm field
     this.confirmPassword = undefined;
+    next();
+});
+
+userSchema.pre('save', function(next) {
+    if (!this.isModified('password') || this.isNew) return next();
+
+    this.passwordChangedAt = Date.now() - 1000;
     next();
 });
 

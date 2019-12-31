@@ -2,6 +2,8 @@ const express = require('express');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
+const mongoSanitize = require('express-mongo-sanitize');
+const xss = require('xss-clean');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -18,7 +20,7 @@ app.use(helmet());
 // Development logging
 console.log(process.env.NODE_ENV);
 if (process.env.NODE_ENV === 'development') {
-    app.use('MORGAN', morgan('dev'));
+    app.use(morgan('dev'));
 }
 
 // limit 100 request on 1 hour with 1 IP
@@ -28,6 +30,12 @@ const limiter = rateLimit({
     message: 'Too many requests from this IP, please try again in an hour!'
 });
 app.use('/api', limiter); // only limit with /api... request
+
+// Data sanitization against NoSQL query injection, ex: "email": {$gt:""}
+app.use(mongoSanitize());
+
+// Data sanitization against XSS, ex "name": <div id='bad-code'></div>
+app.use(xss());
 
 // Body parser, reading data from body into req.body
 app.use(express.json({ limit: '10kb' }));

@@ -5,7 +5,10 @@ const Tour = require('./../../models/tourModel');
 
 dotenv.config({ path: './config.env' });
 
-const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.DATABASE_PASSWORD);
+const DB = process.env.DATABASE.replace(
+    '<PASSWORD>',
+    process.env.DATABASE_PASSWORD
+);
 
 mongoose
     // use local db
@@ -25,7 +28,7 @@ mongoose
     });
 
 // READ JSON FILE
-const tours = JSON.parse(fs.readFileSync(`${__dirname}/tours-simple.json`, 'utf-8'));
+const tours = JSON.parse(fs.readFileSync(`${__dirname}/tours.json`, 'utf-8'));
 
 // IMPORT DATA INTO DATABASE
 const importData = async () => {

@@ -39,7 +39,8 @@ const userSchema = new mongoose.Schema({
                 return el === this.password; // return true / false
             },
             message: 'Passwords are not the same!'
-        }
+        },
+        select: false
     },
     passwordChangedAt: Date,
     passwordResetToken: String,

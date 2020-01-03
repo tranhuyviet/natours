@@ -135,6 +135,11 @@ tourSchema.virtual('reviews', {
     foreignField: 'tour',
     localField: '_id'
 });
+// tourSchema.virtual('reviews', {
+//     // ref: 'Review',
+//     // foreignField: 'tour',
+//     // localField: '_id'
+// });
 
 // DOCUMENT MIDDLEWARE: runs before .save() and .create() NOT for .update()
 tourSchema.pre('save', function(next) {

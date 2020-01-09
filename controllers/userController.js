@@ -73,6 +73,9 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     // 2. Filtered out unwanted fields names that are not allowed to be updated
     const filterdBody = filterObj(req.body, 'name', 'email'); // only get the name and email
 
+    // update photo name to database
+    if (req.file) filterdBody.photo = req.file.filename;
+
     // 3.Update user document
     const updateUser = await User.findByIdAndUpdate(req.user.id, filterdBody, {
         new: true,

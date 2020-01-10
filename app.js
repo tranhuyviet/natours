@@ -14,6 +14,7 @@ const globalErrorHandler = require('./controllers/errorController');
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
+const bookingRouter = require('./routes/bookingRoutes');
 const viewRouter = require('./routes/viewRoutes');
 
 const app = express();
@@ -82,6 +83,7 @@ app.use('/', viewRouter);
 app.use('/api/v1/tours', tourRouter); // add tour router in to middleware (mounting)
 app.use('/api/v1/users', userRouter); // add user router in to middleware (mounting)
 app.use('/api/v1/reviews', reviewRouter); // add review router in to middleware (mounting)
+app.use('/api/v1/bookings', bookingRouter); // add booking router in to middleware (mounting)
 
 // handle if url request not correctly or not defined
 // .all that mean every request: get, post, update, delete,...
